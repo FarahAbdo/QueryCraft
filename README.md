@@ -1,79 +1,59 @@
 # QueryCraft DBMS Project
 
-## Description
+## Table of Contents
+- [Introduction](#introduction)
+- [Directory Structure](#directory-structure)
+- [Documentation](#documentation)
+- [Getting Started](#getting-started)
+- [Database](#database)
+- [Build and Deployment](#build-and-deployment)
+- [Contributing](#contributing)
+- [License](#license)
 
-The QueryCraft DBMS project is a high-performance database management system designed around the efficiency of binary files for data storage. Our goal is to provide a system that is both fast and reliable, suitable for developers and users requiring efficient data management capabilities. This project is being developed over a 5-week period, with a focus on metadata management, SQL parsing, and a user-friendly command-line interface.
+## Introduction
+The QueryCraft DBMS project aims to develop a high-performance database management system that utilizes binary files for efficient data storage. Designed to support robust metadata management, SQL parsing, and user interaction through a command-line interface, this project covers the entire system including source code and documentation.
 
-## Project Structure 
+## Directory Structure
+- `docs/`: Contains project documentation.
+  - `README.md`: Overview and instructions for the project.
+  - `API_Docs/`: Documentation related to the database operations.
 
-QueryCraft-DBMS/
-│
-├── src/                    # Source files for your DBMS
-│   ├── parser/             # Parser implementation files
-│   │   ├── JavaCC/         # JavaCC files and configurations
-│   │   └── SQLParser.java  # SQL parser code
-│   │
-│   ├── metadata/           # Metadata handling files
-│   │   └── Metadata.java   # Metadata structure and handling
-│   │
-│   └── binary/             # Binary file handling
-│       └── BinaryHandler.java  # Binary file operations
-│
-├── cli/                    # Command line interface source files
-│   └── CommandLineInterface.java
-│
-├── docs/                   # Documentation files
-│   ├── Installation.md     # Installation instructions
-│   └── Usage.md            # Usage examples and guide
-│
-├── tests/                  # Test cases and testing files
-│   └── ParserTests.java    # Tests for the parser functionality
-│
-├── LICENSE                 # The license file
-└── README.md               # The README file for the project
+- `src/`: Source code for the project.
+  - `parser/`: Implementation of the parser.
+    - `JavaCC/`: JavaCC files and configurations.
+    - `SQLParser.java`: SQL parser code.
+  - `metadata/`: Metadata handling.
+    - `Metadata.java`: Metadata structure and handling.
+  - `binary/`: Binary file operations.
+    - `BinaryHandler.java`: Binary file operations code.
+  - `cli/`: Command line interface code.
+    - `CommandLineInterface.java`: CLI implementation.
 
+  - `tests/`: Test code and resources.
+    - `ParserTests.java`: Tests for the parser functionality.
 
-## Project Roadmap and Current Progress
+- `database/`: Database-related files (if applicable).
 
-### Completed Steps
-
-- **Research on Binary and Text Files:** Determined binary files as the optimal choice for data storage due to their performance advantages.
-
-- **Metadata Handling Research:** Explored methods for effective metadata management within a DBMS.
-
-- **Metadata Design:** Created a design for serializing table and column information, including names and data types.
-
-- **Parser Implementation:** Developed a parser using JavaCC for processing SQL statements like table creation, data insertion, and data selection, including grammar file testing for SQL statement specification.
-
-### Next Steps
-
-- **Binary File Handling:** To implement advanced functionality for managing binary files for storing serialized metadata and table data.
-
-- **Command Line Interface Design:** To develop a command-line interface for executing SQL commands and table and data operations.
-
-## Features
-
-- High performance through binary file utilization.
-- Advanced metadata management system.
-- Comprehensive SQL statement parsing.
-- User-friendly command-line interface.
-
-## Installation
-
-The project is in the development phase. Installation instructions will be provided upon the completion of the project.
+- `build.gradle`: Build and configuration file (if using Gradle).
+- `.gitignore`: Specifies files and directories to be ignored by version control.
+- `LICENSE`: Licensing information.
+- `deployment/`: Release and deployment scripts (if applicable).
 
 ## Documentation
+Documentation for the QueryCraft DBMS project is located in the `docs/` directory. This includes a detailed overview of the project, installation instructions, usage guides, and API documentation.
 
-Full documentation will be made available after the completion of the project's core functionalities, including detailed installation, usage, and development guides.
+## Getting Started
+To get started with the QueryCraft DBMS project, refer to the `README.md` in the `docs/` directory for installation instructions and how to run the project.
+
+## Database
+Details on the database schema, configuration, and how to seed the database can be found under the `database/` directory (if applicable).
+
+## Build and Deployment
+Instructions for building and deploying the QueryCraft DBMS project can be found in the `build.gradle` file for Gradle projects, or consult the `deployment/` directory for custom deployment scripts.
 
 ## Contributing
-
-We welcome contributions! If you're interested in contributing, please stay tuned for our contributing guidelines.
+Contributions to the QueryCraft DBMS project are welcome! Please refer to the `CONTRIBUTING.md` file for guidelines on how to make contributions (note: create this file if it doesn't exist).
 
 ## License
+This project is licensed under the MIT License - see the `LICENSE` file for details.
 
-This project is licensed under the MIT License - see the LICENSE.md file for details.
-
-## Credits
-
-This project is developed by the QueryCraft team, with contributions from members specializing in database management, Java programming, and system design.
