@@ -4,6 +4,35 @@
 
 The QueryCraft DBMS project is a high-performance database management system designed around the efficiency of binary files for data storage. Our goal is to provide a system that is both fast and reliable, suitable for developers and users requiring efficient data management capabilities. This project is being developed over a 5-week period, with a focus on metadata management, SQL parsing, and a user-friendly command-line interface.
 
+## Project Structure 
+
+QueryCraft-DBMS/
+│
+├── src/                    # Source files for your DBMS
+│   ├── parser/             # Parser implementation files
+│   │   ├── JavaCC/         # JavaCC files and configurations
+│   │   └── SQLParser.java  # SQL parser code
+│   │
+│   ├── metadata/           # Metadata handling files
+│   │   └── Metadata.java   # Metadata structure and handling
+│   │
+│   └── binary/             # Binary file handling
+│       └── BinaryHandler.java  # Binary file operations
+│
+├── cli/                    # Command line interface source files
+│   └── CommandLineInterface.java
+│
+├── docs/                   # Documentation files
+│   ├── Installation.md     # Installation instructions
+│   └── Usage.md            # Usage examples and guide
+│
+├── tests/                  # Test cases and testing files
+│   └── ParserTests.java    # Tests for the parser functionality
+│
+├── LICENSE                 # The license file
+└── README.md               # The README file for the project
+
+
 ## Project Roadmap and Current Progress
 
 ### Completed Steps
@@ -48,7 +77,3 @@ This project is licensed under the MIT License - see the LICENSE.md file for det
 ## Credits
 
 This project is developed by the QueryCraft team, with contributions from members specializing in database management, Java programming, and system design.
-
-## Contact
-
-For more information on the QueryCraft DBMS project, please contact us at [Your Contact Information].
