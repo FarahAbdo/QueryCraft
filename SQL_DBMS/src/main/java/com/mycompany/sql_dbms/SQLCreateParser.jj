@@ -1,0 +1,151 @@
+
+options{STATIC=true;}
+
+PARSER_BEGIN(SQLCreateParser)
+package com.mycompany.sql_dbms;
+import java.util.List;
+import java.util.ArrayList;
+import java.io.FileOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+///import java.util.*;
+import java.io.*;
+import java.io.Serializable;
+
+public class SQLCreateParser {
+    public static void main(String[] args) throws ParseException, IOException {
+        SQLCreateParser parser = new SQLCreateParser(System.in);
+        parser.parse();
+    }
+}
+
+class Metadata implements Serializable {
+    private String tableName;
+    private List<String> columns;
+
+    public Metadata(String tableName, List<String> columns) {
+        this.tableName = tableName;
+        this.columns = columns;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public List<String> getColumns() {
+        return columns;
+    }
+
+}
+
+    PARSER_END(SQLCreateParser)
+
+    SKIP:{" "|"\t"|"\n"|"\r"}
+
+    TOKEN:{<CREATE:"CREATE">|<TABLE:"TABLE">|<LPAREN:"(">|<RPAREN:")">|<COMMA:",">|<SEMICOLON:";">|<PRIMARY_KEY:"PRIMARY""KEY">|<INT:"INT">|<VARCHAR:"VARCHAR">|<NUMBER:(["0"-"9"])+>|<IDENTIFIER:(["a"-"z","A"-"Z"])+>}
+
+void parse() throws ParseException, IOException:
+{
+    List<String> columns = new ArrayList<String>();
+    String tableName;
+}
+{
+    <CREATE> <TABLE> tableName = tableName() <LPAREN> columns = columnList() <RPAREN> <SEMICOLON>
+    {
+        DataOutputStream sos = null;
+        try {
+            sos = new DataOutputStream(new FileOutputStream("output.bin"));
+            sos.writeUTF("Table Name: " + tableName + "\n");
+            sos.writeUTF("Columns:\n");
+            for (String column : columns) {
+                sos.writeUTF(column + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (sos != null) {
+                try {
+                    sos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        // Create metadata
+                        // Create metadata
+                              // Create metadata
+                // Create metadata
+                                Metadata metadata = new Metadata(tableName, columns);
+
+                                // Serialize metadata and save to file
+                                try {
+                                    ObjectOutputStream dos = new ObjectOutputStream(new FileOutputStream("metadata.bin"));
+                                    dos.writeObject(metadata);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                // Deserialize metadata from file
+                                Metadata deserializedMetadata;
+                                try {
+                                    ObjectInputStream ois = new ObjectInputStream(new FileInputStream("metadata.bin"));
+                                    deserializedMetadata = (Metadata) ois.readObject();
+                                    System.out.println("Deserialized Metadata:");
+                                    System.out.println("Table Name: " + deserializedMetadata.getTableName());
+                                    System.out.println("Columns: " + deserializedMetadata.getColumns());
+                                } catch ( ClassNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+
+    }
+}
+
+List<String> columnList():
+{
+    List<String> columns = new ArrayList<String>();
+    String columnName, type;
+}
+{
+    ( columnName = identifier() type =
+
+    columnType() { columns.add(columnName + " " + type); }(
+
+    <COMMA> columnName = identifier() type =
+
+    columnType() { columns.add(columnName + " " + type); })*)?
+
+    {
+        return columns;
+    }
+}
+
+String columnType():
+{
+    Token sizeToken;
+}
+{
+    <INT> <LPAREN> sizeToken = <NUMBER> <RPAREN>
+    { return "INT(" + sizeToken.image + ")"; }
+  |
+    <VARCHAR> <LPAREN> sizeToken = <NUMBER> <RPAREN>
+    { return "VARCHAR(" + sizeToken.image + ")"; }
+}
+
+String tableName():
+{
+    Token t;
+}
+
+{
+    t = <IDENTIFIER>
+    { return t.image; }
+}
+
+String identifier():
+{
+    Token t;
+}
+{
+    t = <IDENTIFIER>
+    { return t.image; }
+}

@@ -1,0 +1,12 @@
+com\mycompany\sql_dbms\Metadata.class
+com\mycompany\sql_dbms\Shell$2.class
+com\mycompany\sql_dbms\SimpleCharStream.class
+com\mycompany\sql_dbms\SQLCreateParser.class
+com\mycompany\sql_dbms\ParseException.class
+com\mycompany\sql_dbms\Token.class
+com\mycompany\sql_dbms\Shell$1.class
+com\mycompany\sql_dbms\SQLCreateParserTokenManager.class
+com\mycompany\sql_dbms\SQLCreateParserConstants.class
+com\mycompany\sql_dbms\SQL_DBMS.class
+com\mycompany\sql_dbms\Shell.class
+com\mycompany\sql_dbms\TokenMgrError.class
