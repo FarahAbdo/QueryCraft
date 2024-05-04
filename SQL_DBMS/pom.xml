@@ -12,11 +12,5 @@
         <exec.mainClass>com.mycompany.sql_dbms.SQL_DBMS</exec.mainClass>
     </properties>
     
-<dependencies>  
-   <dependency>
-   <groupId>net.java.dev.javacc</groupId>
-    <artifactId>javacc</artifactId>
-    <version>6.1.0</version>
-</dependency>
-  </dependencies>
+
 </project>

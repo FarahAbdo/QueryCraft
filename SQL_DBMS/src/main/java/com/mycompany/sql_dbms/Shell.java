@@ -13,6 +13,9 @@ public class Shell extends javax.swing.JFrame {
     /**
      * Creates new form NewJFrame
      */
+    
+    long time;
+    int lastQuryBegin=38;
     public Shell() {
         initComponents();
         load();
@@ -82,15 +85,33 @@ public class Shell extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    private String query(String queryStatment){
+    queryStatment = queryStatment.replaceAll("\n                >"," ");
+    queryStatment = queryStatment.replaceAll("( )+"," ").toUpperCase();
+    //System.out.println(queryStatment);
+    return "\n"+queryStatment;
+    } 
     private void jTextArea1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextArea1KeyPressed
         String in = jTextArea1.getText();
         if(evt.getExtendedKeyCode()== 10){
-           
-            if(in.charAt(in.length()-1)== ';'||in.substring(in.length()-12,in.length()).equals("QueryCraft >"))
+           if(in.charAt(in.length()-1)== ';'){
+                time = System.currentTimeMillis();
+                        
+
+              //System.out.println(in.substring(lastQuryBegin));
+             jTextArea1.append( query(in.substring(lastQuryBegin)));
+             
+              jTextArea1.append("\nmillis is "+(System.currentTimeMillis()-time));
             jTextArea1.append("\nQueryCraft >");
+            lastQuryBegin=jTextArea1.getText().length();
+           }
+            else if(in.substring(in.length()-12,in.length()).equals("QueryCraft >")){
+            jTextArea1.append("\nQueryCraft >");
+            lastQuryBegin=in.length()+13;
+            }
             else if(in.substring(in.length()-3,in.length()).toLowerCase().equals("cls")){
             jTextArea1.setText("QueryCraft >");
+            lastQuryBegin=12;
             }
             else if(in.substring(in.length()-4,in.length()).toLowerCase().equals("exit")){
             this.dispose();
