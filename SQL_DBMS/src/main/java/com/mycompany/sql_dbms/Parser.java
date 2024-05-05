@@ -5,6 +5,8 @@
 package com.mycompany.sql_dbms;
 
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author Abdo humed
@@ -16,6 +18,8 @@ public class Parser {
     public Parser(){
     nextStage = new Parser2(); 
     }
+    
+     
 
     public String query(String queryStatment) {
         // this.queryStatment = queryStatment;
@@ -39,6 +43,8 @@ public class Parser {
             nextStage.parseSelect(queryStatment);
         } else
             queryResponse = "You have an error in your SQL syntax;you should write create or insert or delete";
+       
+       
         return queryResponse;
     }
     
@@ -46,19 +52,19 @@ public class Parser {
         String trimmedQuery = query.trim(); // Trim whitespace for better matching
         // Regex to match "CREATE TABLE", "SELECT", or "INSERT INTO" at the start of the
         // query
-        return trimmedQuery.matches("(?i)\\s*(CREATE TABLE|SELECT|INSERT INTO)\\s+.+");
+        return trimmedQuery.toUpperCase().matches("(?i)\\s*(CREATE TABLE|SELECT|INSERT INTO)\\s+.+");
     }
      public static boolean validateSelectQuery(String query) {
         String regex = "(?i)^SELECT\\s+(\\*|([\\w\\s,]+))\\s+FROM\\s+\\w+" + // Columns and FROM
                 "(\\s+(WHERE|JOIN\\s+\\w+\\s+ON|GROUP\\s+BY|HAVING|ORDER\\s+BY)\\s+.+)*" + // Optional clauses
                 "\\s*;$"; // End of query
-        return query.trim().matches(regex);
+        return query.trim().toUpperCase().matches(regex);
     }
 
     public static boolean validateInsertQuery(String query) {
         // Using regex to match the structure of an INSERT INTO statement while allowing
         // flexible whitespace handling
-        return query.trim().matches("(?i)^INSERT\\s+INTO\\s+\\w+\\s*" +
+        return query.trim().toUpperCase().matches("(?i)^INSERT\\s+INTO\\s+\\w+\\s*" +
                 "(\\(\\s*\\w+(\\s*,\\s*\\w+)*\\s*\\))?\\s*" +
                 "VALUES\\s*\\(\\s*[^)]+\\s*\\)\\s*;$");
     }
@@ -151,39 +157,5 @@ public class Parser {
         queryResponse = nextStage.parseCreateTable(tableName, colom);
     }
 
-    private void insert(String queryStatment) {
-        // try {
-        // string tableName;
-        // if (queryStatment.indexOf('(') < queryStatment.indexOf(' ')) {
-        // tableName = queryStatment.substring(0, queryStatment.indexOf('('));
-        // queryStatment = queryStatment.substring(queryStatment.indexOf('('));
-        // } else {
-        // tableName = queryStatment.substring(0, queryStatment.indexOf(' '));
-        // queryStatment = queryStatment.substring(queryStatment.indexOf(' ') + 1);
-        // }
-        // queryResponse = "the table created whith name" +
-        // queryStatment.substring(index);
-        // } catch (Exception e) {
-        // queryResponse = "You have an error in your SQL syntax;";
-        // }
-
-    }
-
-    private void select(String queryStatment) {
-        // try {
-        // string tableName;
-        // if (queryStatment.indexOf('(') < queryStatment.indexOf(' ')) {
-        // tableName = queryStatment.substring(0, queryStatment.indexOf('('));
-        // queryStatment = queryStatment.substring(queryStatment.indexOf('('));
-        // } else {
-        // tableName = queryStatment.substring(0, queryStatment.indexOf(' '));
-        // queryStatment = queryStatment.substring(queryStatment.indexOf(' ') + 1);
-        // }
-        // queryResponse = "the table created whith name" +
-        // queryStatment.substring(index);
-        // } catch (Exception e) {
-        // queryResponse = "You have an error in your SQL syntax;";
-        // }
-
-    }
+  
 }

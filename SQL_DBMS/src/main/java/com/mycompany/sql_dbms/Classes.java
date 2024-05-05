@@ -70,9 +70,10 @@ class Parser2 {
         
     }
     
-     @Override
-    // overriding method
-    protected void finalize() {
+  
+    protected void setTables()  {
+       
+        System.out.println("kkk");
      try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("tables.bin"))) {
             outputStream.writeObject(tables);
            // System.out.println("Table " + tableName + " stored in binary file: " + filename);
@@ -99,6 +100,7 @@ class Parser2 {
             table.addColumn(new Column(colParts[0], colParts[1]));
         }
         tables.add(table.tableName);
+       setTables() ;
         table.storeTable(tableName + ".bin");
         return "";
     }
