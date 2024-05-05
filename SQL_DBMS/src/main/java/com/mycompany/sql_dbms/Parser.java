@@ -13,6 +13,9 @@ public class Parser {
     // String queryStatment;
     private static String queryResponse;
     Parser2 nextStage;
+    public Parser(){
+    nextStage = new Parser2(); 
+    }
 
     public String query(String queryStatment) {
         // this.queryStatment = queryStatment;
@@ -112,7 +115,7 @@ public class Parser {
         String[] columnList = columns.split(",");
         for (String column : columnList) {
             // Trim each column definition and validate its format
-            if (!column.trim().matches("\\w+\\s+(INT|CHAR\\([1-9][0-9]?\\)|VARCHAR\\([1-9][0-9]?\\))")) {
+            if (!column.trim().toUpperCase().matches("\\w+\\s+(INT|CHAR\\([1-9][0-9]?\\)|VARCHAR\\([1-9][0-9]?\\))")) {
                 return false; // Validate that each column consists of a name followed by a valid type with
                               // constraints as specified
             }
