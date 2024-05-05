@@ -6,7 +6,7 @@ package com.mycompany.sql_dbms;
 
 /**
  *
- * @author hp
+ * @author Abdo humed
  */
 public class Shell extends javax.swing.JFrame {
 
@@ -16,9 +16,11 @@ public class Shell extends javax.swing.JFrame {
     
     long time;
     int lastQuryBegin=38;
+    Parser pars;
     public Shell() {
         initComponents();
         load();
+        pars = new Parser();
     }
 
     /**
@@ -85,12 +87,22 @@ public class Shell extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+    /**
+     * 
+     * @param queryStatment
+     * @return the response 
+     */
     private String query(String queryStatment){
     queryStatment = queryStatment.replaceAll("\n                >"," ");
-    queryStatment = queryStatment.replaceAll("( )+"," ").toUpperCase();
+    queryStatment = queryStatment.trim();
     //System.out.println(queryStatment);
-    return "\n"+queryStatment;
+    return"\n" + pars.query(queryStatment);
     } 
+    
+    
+    
+    
+    
     private void jTextArea1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextArea1KeyPressed
         String in = jTextArea1.getText();
         if(evt.getExtendedKeyCode()== 10){
