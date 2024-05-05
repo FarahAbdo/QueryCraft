@@ -57,16 +57,36 @@ class Record implements Serializable{
 //**************************************************************************//
 
 class Parser2 {
-    List<Table> tables;
+    List<String> tables;
 
     Parser2() {
         tables = new ArrayList<>();
+         try {
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream("tables.bin"));
+                tables = (List<String>) ois.readObject();
+          } catch ( Exception e) {
+              e.printStackTrace();
+          }
+        
     }
-
+    
+     @Override
+    // overriding method
+    protected void finalize() {
+     try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("tables.bin"))) {
+            outputStream.writeObject(tables);
+           // System.out.println("Table " + tableName + " stored in binary file: " + filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
     void parse(String query) {
         //validation code
     }
-
+   
+    
     public String parseCreateTable(String tableName , String [] columns) {
         /*String[] parts = statement.split("\\(");
         String tableName = parts[0].substring("CREATE TABLE".length()).trim();
@@ -78,7 +98,7 @@ class Parser2 {
             String[] colParts = column.split(" ");
             table.addColumn(new Column(colParts[0], colParts[1]));
         }
-        tables.add(table);
+        tables.add(table.tableName);
         table.storeTable(tableName + ".bin");
         return "";
     }
@@ -172,12 +192,23 @@ class Parser2 {
 
 
     Table getTable(String tableName) {
-        for (Table table : tables) {
-            if (table.tableName.equals(tableName)) {
-                return table;
+        for (String tableNamet : tables) {
+            if (tableNamet.equals(tableName)) {
+                return getTableFromfile(tableName);
             }
         }
         return null;
+    }
+    Table getTableFromfile(String tableName){
+        Table table ;
+      try {
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(tableName+".bin"));
+                table = (Table) ois.readObject();
+                return table;
+          } catch ( Exception e) {
+              e.printStackTrace();
+          }
+      return null;
     }
 }
 
