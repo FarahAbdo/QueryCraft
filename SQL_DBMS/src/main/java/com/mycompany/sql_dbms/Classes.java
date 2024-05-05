@@ -1,3 +1,5 @@
+package com.mycompany.sql_dbms;
+
 import java.io.Serializable;
 import java.util.*;
 import java.io.*;
@@ -54,10 +56,10 @@ class Record implements Serializable{
 }
 //**************************************************************************//
 
-class Parser {
+class Parser2 {
     List<Table> tables;
 
-    Parser() {
+    Parser2() {
         tables = new ArrayList<>();
     }
 
@@ -65,7 +67,7 @@ class Parser {
         //validation code
     }
 
-    public void parseCreateTable(String tableName , String [] columns) {
+    public String parseCreateTable(String tableName , String [] columns) {
         /*String[] parts = statement.split("\\(");
         String tableName = parts[0].substring("CREATE TABLE".length()).trim();
         String columnsPart = parts[1].substring(0, parts[1].length() - 1);
@@ -78,6 +80,7 @@ class Parser {
         }
         tables.add(table);
         table.storeTable(tableName + ".bin");
+        return "";
     }
 
     public void parseInsert(String statement) {

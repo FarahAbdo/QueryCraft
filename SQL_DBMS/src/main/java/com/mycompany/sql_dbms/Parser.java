@@ -12,6 +12,7 @@ import java.util.Stack;
 public class Parser {
     // String queryStatment;
     private static String queryResponse;
+    Parser2 nextStage;
 
     public String query(String queryStatment) {
         // this.queryStatment = queryStatment;
@@ -27,11 +28,11 @@ public class Parser {
         } else if (words[0].equalsIgnoreCase("insert")) {
             if (words[1].equalsIgnoreCase("into")&&validateInsertQuery( queryResponse ))
                 
-                    insert(queryStatment.substring(12));
+                    nextStage.parseInsert(queryStatment);
             else
                 queryResponse = "You have an error in your SQL syntax;";
-        } else if (words[0].equalsIgnoreCase("select") && validateInsertQuery(queryStatment)) {
-            select(queryStatment.substring(7));
+        } else if (words[0].equalsIgnoreCase("select") && validateSelectQuery(queryStatment)) {
+            nextStage.parseSelect(queryStatment);
         } else
             queryResponse = "You have an error in your SQL syntax;you should write create or insert or delete";
         return queryResponse;
@@ -87,7 +88,7 @@ public class Parser {
             return false;
         }
 
-        System.out.println("CREATE TABLE structure is valid.");
+       // System.out.println("CREATE TABLE structure is valid.");
         return true;
     }
 
@@ -142,20 +143,8 @@ public class Parser {
         cloloms = cloloms.replaceAll("\\);", "");
 
         String[] colom = cloloms.split(",");
-        String[][] colom2 = new String[colom.length][2];
-
-        for (int i = 0; i < colom.length; i++) {
-            System.out.println(colom[i]);
-            colom2[i] = colom[i].trim().split(" ");
-        }
-        queryResponse = "the table created whith name " + tableName;
-        for (int i = 0; i < colom2.length; i++) {
-            for (int j = 0; j < 2; j++) {
-                queryResponse += "\ncolom2[" + i + "][" + j + "]:" + colom2[i][j] + " ";
-            }
-
-        }
-
+        
+        queryResponse = nextStage.parseCreateTable(tableName, colom);
     }
 
     private void insert(String queryStatment) {
