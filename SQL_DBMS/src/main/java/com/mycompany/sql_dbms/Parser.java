@@ -20,9 +20,10 @@ public class Parser {
         String[] words = queryStatment.split(" ");
         if(validateStartOfQuery(queryStatment))
         if (words[0].equalsIgnoreCase("create")) {
-            if (words[1].equalsIgnoreCase("table"))
+            System.out.println(words[1]);
+            if (words[1].equalsIgnoreCase("table")){
                 if(validateCreateTableQuery(queryStatment))
-                    createTable(queryStatment.substring(13));
+                    createTable(queryStatment.substring(13));}
             else
                 queryResponse = "You have an error in your SQL syntax; create should followed by table";
         } else if (words[0].equalsIgnoreCase("insert")) {

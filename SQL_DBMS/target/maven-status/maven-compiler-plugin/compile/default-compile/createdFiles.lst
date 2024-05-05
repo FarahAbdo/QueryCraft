@@ -1,5 +1,9 @@
+com\mycompany\sql_dbms\Parser2.class
 com\mycompany\sql_dbms\Shell$2.class
-com\mycompany\sql_dbms\SQL_DBMS.class
-com\mycompany\sql_dbms\Shell.class
 com\mycompany\sql_dbms\Parser.class
 com\mycompany\sql_dbms\Shell$1.class
+com\mycompany\sql_dbms\Record.class
+com\mycompany\sql_dbms\Column.class
+com\mycompany\sql_dbms\SQL_DBMS.class
+com\mycompany\sql_dbms\Shell.class
+com\mycompany\sql_dbms\Table.class
