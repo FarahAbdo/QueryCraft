@@ -34,13 +34,13 @@ public class Parser {
             else
                 queryResponse = "You have an error in your SQL syntax; create should followed by table";
         } else if (words[0].equalsIgnoreCase("insert")) {
-            if (words[1].equalsIgnoreCase("into")&&validateInsertQuery( queryResponse ))
+            if (words[1].equalsIgnoreCase("into")&&validateInsertQuery( queryStatment ))
                 
                     nextStage.parseInsert(queryStatment);
             else
                 queryResponse = "You have an error in your SQL syntax;";
         } else if (words[0].equalsIgnoreCase("select") && validateSelectQuery(queryStatment)) {
-            nextStage.parseSelect(queryStatment);
+           queryResponse = nextStage.parseSelect(queryStatment);
         } else
             queryResponse = "You have an error in your SQL syntax;you should write create or insert or delete";
        

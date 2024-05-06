@@ -84,7 +84,7 @@ class Parser2 {
   
     protected void setTables()  {
        
-        System.out.println("kkk");
+       
      try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("tables.bin"))) {
             outputStream.writeObject(tables);
            // System.out.println("Table " + tableName + " stored in binary file: " + filename);
@@ -113,12 +113,12 @@ class Parser2 {
         tables.add(table.tableName);
        setTables() ;
         table.storeTable(tableName + ".bin");
-        return "";
+        return "the table "+tableName+" are created";
     }
 
     public void parseInsert(String statement) {
-        String[] parts = statement.split("VALUES");
-        String tableName = parts[0].split("INTO")[1].trim(); // Extracting the table name from the INSERT INTO statement
+        String[] parts = statement.split("(?i)VALUES");
+        String tableName = parts[0].split("(?i)INTO")[1].trim(); // Extracting the table name from the INSERT INTO statement
         Table table = getTable(tableName);
         if (table == null) {
             System.err.println("Error: Table '" + tableName + "' does not exist.");
@@ -138,19 +138,25 @@ class Parser2 {
 
 
 
-    public void parseSelect(String statement) {
-        String[] parts = statement.split("WHERE");
-        String tableName = parts[0].split("FROM")[1].trim();
+    public String parseSelect(String statement) {
+        String ruselt="";
+        String[] parts = statement.split("(?i)WHERE");
+       
+        String tableName = parts[0].split("(?i)FROM")[1].trim();
         Table table = getTable(tableName);
         String condition = parts[1].trim();
-        System.out.println("Executing SELECT query on table: " + tableName);
+        //System.out.println("Executing SELECT query on table: " + tableName);
+        ruselt +="Executing SELECT query on table: " + tableName;
         List<Record> selectedRecords = selectRecords(table, condition);
         for (Record record : selectedRecords) {
-            System.out.println("Selected Record:");
+           // System.out.println("Selected Record:");
+            ruselt += "Selected Record:";
             for (int i = 0; i < table.columns.size(); i++) {
-                System.out.println(table.columns.get(i).columnName + ": " + record.values.get(i));
+               // System.out.println(table.columns.get(i).columnName + ": " + record.values.get(i));
+                ruselt +=table.columns.get(i).columnName + ": " + record.values.get(i);
             }
         }
+        return ruselt;
     }
 
     List<Record> selectRecords(Table table, String condition) {
