@@ -62,11 +62,22 @@ class Parser2 {
     Parser2() {
         tables = new ArrayList<>();
          try {
-                ObjectInputStream ois = new ObjectInputStream(new FileInputStream("tables.bin"));
-                tables = (List<String>) ois.readObject();
-          } catch ( Exception e) {
-              e.printStackTrace();
-          }
+            File file = new File("tables.bin");
+            if (!file.exists()) {
+                // Create the file if it doesn't exist
+                file.createNewFile();
+            } else {
+                // Read the list of tables from the file
+                if (file.length() > 0) {
+                    ObjectInputStream ois = new ObjectInputStream(new FileInputStream("tables.bin"));
+                    tables = (List<String>) ois.readObject();
+                } else {
+                    System.out.println("The file 'tables.bin' is empty.");
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         
     }
     
