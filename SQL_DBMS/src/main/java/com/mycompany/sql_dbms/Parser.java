@@ -61,12 +61,48 @@ public class Parser {
         return query.trim().toUpperCase().matches(regex);
     }
 
-    public static boolean validateInsertQuery(String query) {
-        // Using regex to match the structure of an INSERT INTO statement while allowing
-        // flexible whitespace handling
-        return query.trim().toUpperCase().matches("(?i)^INSERT\\s+INTO\\s+\\w+\\s*" +
-                "(\\(\\s*\\w+(\\s*,\\s*\\w+)*\\s*\\))?\\s*" +
-                "VALUES\\s*\\(\\s*[^)]+\\s*\\)\\s*;$");
+public static boolean validateInsertQuery(String query) {
+        // Normalize the query by trimming and removing excessive internal spaces for easier processing
+        query = query.trim().replaceAll("\\s+", " ");
+
+        // Basic syntax check
+        if (!query.matches("(?i)^INSERT INTO\\s+\\w+\\s*(\\(\\s*\\w+(\\s*,\\s*\\w+)*\\s*\\))?\\s*VALUES\\s*\\(.*\\)\\s*;$")) {
+            System.out.println("Invalid INSERT INTO syntax or format.");
+            return false;
+        }
+
+        // Extracting details if the syntax is correct
+        String tableName;
+        String[] columns = null;
+        String valuesSection;
+
+        // Determine if column names are provided
+        int startCols = query.indexOf('(');
+        int endCols = query.indexOf(')');
+        int startValues = query.lastIndexOf('(');
+        int endValues = query.lastIndexOf(')');
+
+        if (startCols < endValues && endCols < startValues) {
+            tableName = query.substring(11, startCols).trim();
+            String columnsPart = query.substring(startCols + 1, endCols).trim();
+            columns = columnsPart.split(",");
+            valuesSection = query.substring(startValues + 1, endValues).trim();
+        } else {
+            tableName = query.substring(11, query.indexOf(" VALUES")).trim();
+            valuesSection = query.substring(startValues + 1, endValues).trim();
+        }
+
+        // Check for logical errors in substring indices
+        if (startValues >= endValues || startCols >= endCols) {
+            System.out.println("Error: Incorrect positioning or syntax near VALUES clause.");
+            return false;
+        }
+
+        // Optional: Validate column names against a schema (not implemented here)
+        // Optional: Validate values according to column types (not implemented here)
+
+        System.out.println("INSERT INTO structure is valid for table: " + tableName + " with values: " + valuesSection);
+        return true;
     }
 
     // Method to validate the structure of a CREATE TABLE query
