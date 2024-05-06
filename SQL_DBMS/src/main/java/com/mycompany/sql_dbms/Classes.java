@@ -116,13 +116,13 @@ class Parser2 {
         return "the table "+tableName+" are created";
     }
 
-    public void parseInsert(String statement) {
+    public String parseInsert(String statement) {
         String[] parts = statement.split("(?i)VALUES");
         String tableName = parts[0].split("(?i)INTO")[1].trim(); // Extracting the table name from the INSERT INTO statement
         Table table = getTable(tableName);
         if (table == null) {
-            System.err.println("Error: Table '" + tableName + "' does not exist.");
-            return;
+           // System.err.println("Error: Table '" + tableName + "' does not exist.");
+            return"Error: Table '" + tableName + "' does not exist.";
         }
         String valuesPart = parts[1].trim();
         String[] values = valuesPart.substring(1, valuesPart.length() - 1).split(",");
@@ -133,6 +133,7 @@ class Parser2 {
         }
         table.addRecord(new Record(recordValues));
         table.storeTable(tableName + ".bin");
+        return "the valus are inserted";
     }
 
 

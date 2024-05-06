@@ -36,9 +36,9 @@ public class Parser {
         } else if (words[0].equalsIgnoreCase("insert")) {
             if (words[1].equalsIgnoreCase("into")&&validateInsertQuery( queryStatment ))
                 
-                    nextStage.parseInsert(queryStatment);
+                   queryResponse = nextStage.parseInsert(queryStatment);
             else
-                queryResponse = "You have an error in your SQL syntax;";
+                queryResponse = "1You have an error in your SQL syntax;";
         } else if (words[0].equalsIgnoreCase("select") && validateSelectQuery(queryStatment)) {
            queryResponse = nextStage.parseSelect(queryStatment);
         } else
@@ -88,7 +88,8 @@ public static boolean validateInsertQuery(String query) {
             columns = columnsPart.split(",");
             valuesSection = query.substring(startValues + 1, endValues).trim();
         } else {
-            tableName = query.substring(11, query.indexOf(" VALUES")).trim();
+            String [] part= query.split("(?i)VALUES");
+            tableName = part[0].substring(11).trim();
             valuesSection = query.substring(startValues + 1, endValues).trim();
         }
 
