@@ -35,6 +35,12 @@ class Table implements Serializable {
             e.printStackTrace();
         }
     }
+    
+    public String toString(){
+        String r = "table name: "+tableName+"\nthe records is "+ records.size()+"\n" ;
+        
+        return r;
+    }
 }
 
 class Column implements Serializable{
@@ -78,7 +84,7 @@ class Parser2 {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        
+       
     }
     
   
@@ -113,7 +119,7 @@ class Parser2 {
         tables.add(table.tableName);
        setTables() ;
         table.storeTable(tableName + ".bin");
-        return "the table "+tableName+" are created";
+        return "the table "+tableName+" is created";
     }
 
     public String parseInsert(String statement) {
@@ -124,7 +130,8 @@ class Parser2 {
            // System.err.println("Error: Table '" + tableName + "' does not exist.");
             return"Error: Table '" + tableName + "' does not exist.";
         }
-        String valuesPart = parts[1].trim();
+        String valuesPart = parts[1].trim().replaceAll("\\)","");
+        
         String[] values = valuesPart.substring(1, valuesPart.length() - 1).split(",");
         List<Object> recordValues = new ArrayList<>();
         for (int i = 0; i < values.length; i++) {
@@ -133,7 +140,7 @@ class Parser2 {
         }
         table.addRecord(new Record(recordValues));
         table.storeTable(tableName + ".bin");
-        return "the valus are inserted";
+        return "the values are inserted";
     }
 
 
@@ -145,17 +152,24 @@ class Parser2 {
        
         String tableName = parts[0].split("(?i)FROM")[1].trim();
         Table table = getTable(tableName);
+        System.out.println(table.toString());
         String condition = parts[1].trim();
         //System.out.println("Executing SELECT query on table: " + tableName);
-        ruselt +="Executing SELECT query on table: " + tableName;
+        ruselt +="Executing SELECT query on table: " + tableName +"\n";
         List<Record> selectedRecords = selectRecords(table, condition);
-        for (Record record : selectedRecords) {
+        System.out.println(condition);
+        System.out.println(selectedRecords.size());
+        for (int j=0;j< selectedRecords.size();j++ ) {
            // System.out.println("Selected Record:");
-            ruselt += "Selected Record:";
+           if(j==0)
+            ruselt += "Selected Record:"+"\n";
             for (int i = 0; i < table.columns.size(); i++) {
                // System.out.println(table.columns.get(i).columnName + ": " + record.values.get(i));
-                ruselt +=table.columns.get(i).columnName + ": " + record.values.get(i);
+                ruselt +=table.columns.get(i).columnName + ": " + selectedRecords.get(j).values.get(i);
+                if (i!=table.columns.size()-1)
+                    ruselt +=" || ";
             }
+             ruselt +="\n";
         }
         return ruselt;
     }
@@ -221,9 +235,11 @@ class Parser2 {
     }
     Table getTableFromfile(String tableName){
         Table table ;
-      try {
-                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(tableName+".bin"));
+      
+      try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(tableName+".bin"))) {
+                
                 table = (Table) ois.readObject();
+                 System.out.println(table.toString());
                 return table;
           } catch ( Exception e) {
               e.printStackTrace();
