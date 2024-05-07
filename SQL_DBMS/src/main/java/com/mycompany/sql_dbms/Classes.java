@@ -150,7 +150,9 @@ class Parser2 {
         String ruselt = "";
         String[] parts = statement.split("(?i)WHERE");
         String [] selectedColomns = parts[0].split("(?i)FROM")[0].substring(6).split(",");
-        
+        boolean isAll = false ;
+        if (selectedColomns[0].trim().equals("*"))
+        isAll = true;
         
         String tableName = parts[0].split("(?i)FROM")[1].trim();
         tableName = tableName.replaceAll(";", "").trim();
@@ -182,7 +184,7 @@ class Parser2 {
             for (int i = 0; i < table.columns.size(); i++) {
                 // System.out.println(table.columns.get(i).columnName + ": " +
                 // record.values.get(i));
-                if(isItHere(table.columns.get(i).columnName,selectedColomns )){
+                if(isItHere(table.columns.get(i).columnName,selectedColomns )||isAll){
                 ruselt += table.columns.get(i).columnName + ": " + selectedRecords.get(j).values.get(i);
                 
                 if (i != table.columns.size() - 1)
