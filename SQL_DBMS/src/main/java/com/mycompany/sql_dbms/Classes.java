@@ -35,15 +35,15 @@ class Table implements Serializable {
             e.printStackTrace();
         }
     }
-    
-    public String toString(){
-        String r = "table name: "+tableName+"\nthe records is "+ records.size()+"\n" ;
-        
+
+    public String toString() {
+        String r = "table name: " + tableName + "\nthe records is " + records.size() + "\n";
+
         return r;
     }
 }
 
-class Column implements Serializable{
+class Column implements Serializable {
     String columnName;
     String dataType;
 
@@ -53,21 +53,21 @@ class Column implements Serializable{
     }
 }
 
-class Record implements Serializable{
+class Record implements Serializable {
     List<Object> values;
 
     Record(List<Object> values) {
         this.values = values;
     }
 }
-//**************************************************************************//
+// **************************************************************************//
 
 class Parser2 {
     List<String> tables;
 
     Parser2() {
         tables = new ArrayList<>();
-         try {
+        try {
             File file = new File("tables.bin");
             if (!file.exists()) {
                 // Create the file if it doesn't exist
@@ -77,39 +77,40 @@ class Parser2 {
                 if (file.length() > 0) {
                     ObjectInputStream ois = new ObjectInputStream(new FileInputStream("tables.bin"));
                     tables = (List<String>) ois.readObject();
+                    ois.close();
                 } else {
                     System.out.println("The file 'tables.bin' is empty.");
                 }
             }
+
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-       
+
     }
-    
-  
-    protected void setTables()  {
-       
-       
-     try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("tables.bin"))) {
+
+    protected void setTables() {
+
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("tables.bin"))) {
             outputStream.writeObject(tables);
-           // System.out.println("Table " + tableName + " stored in binary file: " + filename);
+            // System.out.println("Table " + tableName + " stored in binary file: " +
+            // filename);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
-    
+
     void parse(String query) {
-        //validation code
+        // validation code
     }
-   
-    
-    public String parseCreateTable(String tableName , String [] columns) {
-        /*String[] parts = statement.split("\\(");
-        String tableName = parts[0].substring("CREATE TABLE".length()).trim();
-        String columnsPart = parts[1].substring(0, parts[1].length() - 1);
-        String[] columns = columnsPart.split(",");*/
+
+    public String parseCreateTable(String tableName, String[] columns) {
+        /*
+         * String[] parts = statement.split("\\(");
+         * String tableName = parts[0].substring("CREATE TABLE".length()).trim();
+         * String columnsPart = parts[1].substring(0, parts[1].length() - 1);
+         * String[] columns = columnsPart.split(",");
+         */
         Table table = new Table(tableName);
         for (String column : columns) {
             column = column.trim();
@@ -117,21 +118,22 @@ class Parser2 {
             table.addColumn(new Column(colParts[0], colParts[1]));
         }
         tables.add(table.tableName);
-       setTables() ;
+        setTables();
         table.storeTable(tableName + ".bin");
-        return "the table "+tableName+" is created";
+        return "the table " + tableName + " is created";
     }
 
     public String parseInsert(String statement) {
         String[] parts = statement.split("(?i)VALUES");
-        String tableName = parts[0].split("(?i)INTO")[1].trim(); // Extracting the table name from the INSERT INTO statement
+        String tableName = parts[0].split("(?i)INTO")[1].trim(); // Extracting the table name from the INSERT INTO
+                                                                 // statement
         Table table = getTable(tableName);
         if (table == null) {
-           // System.err.println("Error: Table '" + tableName + "' does not exist.");
-            return"Error: Table '" + tableName + "' does not exist.";
+            // System.err.println("Error: Table '" + tableName + "' does not exist.");
+            return "Error: Table '" + tableName + "' does not exist.";
         }
-        String valuesPart = parts[1].trim().replaceAll("\\)","");
-        
+        String valuesPart = parts[1].trim().replaceAll("\\)", "");
+
         String[] values = valuesPart.substring(1, valuesPart.length() - 1).split(",");
         List<Object> recordValues = new ArrayList<>();
         for (int i = 0; i < values.length; i++) {
@@ -143,33 +145,40 @@ class Parser2 {
         return "the values are inserted";
     }
 
-
-
-
     public String parseSelect(String statement) {
-        String ruselt="";
+        String ruselt = "";
         String[] parts = statement.split("(?i)WHERE");
-       
+
         String tableName = parts[0].split("(?i)FROM")[1].trim();
+        tableName = tableName.replaceAll(";", "").trim();
+        System.out.println(tableName);
         Table table = getTable(tableName);
-        System.out.println(table.toString());
-        String condition = parts[1].trim();
-        //System.out.println("Executing SELECT query on table: " + tableName);
-        ruselt +="Executing SELECT query on table: " + tableName +"\n";
-        List<Record> selectedRecords = selectRecords(table, condition);
-        System.out.println(condition);
-        System.out.println(selectedRecords.size());
-        for (int j=0;j< selectedRecords.size();j++ ) {
-           // System.out.println("Selected Record:");
-           if(j==0)
-            ruselt += "Selected Record:"+"\n";
+        // System.out.println(table.toString());
+        List<Record> selectedRecords;
+        try {
+            String condition = parts[1].trim();
+            selectedRecords = selectRecords(table, condition);
+        } catch (Exception e) {
+             selectedRecords = table.getRecords();
+        }
+        // System.out.println("Executing SELECT query on table: " + tableName);
+        ruselt += "Executing SELECT query on table: " + tableName + "\n";
+
+        // System.out.println(condition);
+        // System.out.println(selectedRecords.size());
+        for (int j = 0; j < selectedRecords.size(); j++) {
+            // System.out.println("Selected Record:");
+            if (j == 0)
+                ruselt += "Selected Record:\n";
             for (int i = 0; i < table.columns.size(); i++) {
-               // System.out.println(table.columns.get(i).columnName + ": " + record.values.get(i));
-                ruselt +=table.columns.get(i).columnName + ": " + selectedRecords.get(j).values.get(i);
-                if (i!=table.columns.size()-1)
-                    ruselt +=" || ";
+                // System.out.println(table.columns.get(i).columnName + ": " +
+                // record.values.get(i));
+                ruselt += table.columns.get(i).columnName + ": " + selectedRecords.get(j).values.get(i);
+                if (i != table.columns.size() - 1)
+                    ruselt += " || ";
             }
-             ruselt +="\n";
+            if (j < selectedRecords.size() - 1)
+                ruselt += "\n";
         }
         return ruselt;
     }
@@ -183,7 +192,7 @@ class Parser2 {
         condition = condition.replaceAll("<>", " <> ");
         condition = condition.replaceAll(";", "");
         condition = condition.trim();
-        
+
         String[] parts = condition.split("\\s+");
         String columnName = parts[0];
         String comparisonOperator = parts[1];
@@ -231,7 +240,6 @@ class Parser2 {
         }
     }
 
-
     Table getTable(String tableName) {
         for (String tableNamet : tables) {
             if (tableNamet.equals(tableName)) {
@@ -240,29 +248,32 @@ class Parser2 {
         }
         return null;
     }
-    Table getTableFromfile(String tableName){
-        Table table ;
-      
-      try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(tableName+".bin"))) {
-                
-                table = (Table) ois.readObject();
-                 System.out.println(table.toString());
-                return table;
-          } catch ( Exception e) {
-              e.printStackTrace();
-          }
-      return null;
+
+    Table getTableFromfile(String tableName) {
+        Table table;
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(tableName + ".bin"))) {
+
+            table = (Table) ois.readObject();
+            // System.out.println(table.toString());
+            return table;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
 
-/*public class Classes {
-    public static void main(String[] args) {
-        //testing
-        String query = "CREATE TABLE Students (id INT, name STRING, age INT);" +
-                "INSERT INTO Students VALUES (1, 'Alice', 20);" +
-                "INSERT INTO Students VALUES (2, 'Bob', 22);" +
-                "SELECT * FROM Students WHERE age > 20;";
-        Parser parser = new Parser();
-        parser.parse(query);
-    }
-}*/
+/*
+ * public class Classes {
+ * public static void main(String[] args) {
+ * //testing
+ * String query = "CREATE TABLE Students (id INT, name STRING, age INT);" +
+ * "INSERT INTO Students VALUES (1, 'Alice', 20);" +
+ * "INSERT INTO Students VALUES (2, 'Bob', 22);" +
+ * "SELECT * FROM Students WHERE age > 20;";
+ * Parser parser = new Parser();
+ * parser.parse(query);
+ * }
+ * }
+ */

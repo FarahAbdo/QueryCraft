@@ -113,7 +113,7 @@ public class Shell extends javax.swing.JFrame {
               //System.out.println(in.substring(lastQuryBegin));
              jTextArea1.append( query(in.substring(lastQuryBegin)));
              
-              jTextArea1.append("\nmillis is "+(System.currentTimeMillis()-time));
+              jTextArea1.append("\nmillis is "+(System.currentTimeMillis()-time)+"\n");
             jTextArea1.append("\nQueryCraft >");
             lastQuryBegin=jTextArea1.getText().length();
            }
