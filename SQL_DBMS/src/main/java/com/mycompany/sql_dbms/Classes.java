@@ -177,6 +177,13 @@ class Parser2 {
     List<Record> selectRecords(Table table, String condition) {
         List<Record> selectedRecords = new ArrayList<>();
         // Assuming condition is in the form "columnName comparisonOperator value"
+        condition = condition.replaceAll("=", " = ");
+        condition = condition.replaceAll("<", " < ");
+        condition = condition.replaceAll(">", " > ");
+        condition = condition.replaceAll("<>", " <> ");
+        condition = condition.replaceAll(";", "");
+        condition = condition.trim();
+        
         String[] parts = condition.split("\\s+");
         String columnName = parts[0];
         String comparisonOperator = parts[1];
