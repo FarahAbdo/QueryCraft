@@ -41,8 +41,12 @@ public class Parser {
                 queryResponse = "1You have an error in your SQL syntax;";
         } else if (words[0].equalsIgnoreCase("select") && validateSelectQuery(queryStatment)) {
            queryResponse = nextStage.parseSelect(queryStatment);
-        } else
+        } else{
             queryResponse = "You have an error in your SQL syntax;you should write create or insert or delete";
+       System.out.print(queryResponse);}
+        else{
+            queryResponse = "You have an error in your SQL syntax;you should write create or insert or delete";
+            System.out.print(queryResponse);}
        
        
         return queryResponse;
