@@ -228,14 +228,25 @@ class Parser2 {
             case "=":
                 return strValue1.equals(strValue2);
             case ">":
-                return strValue1.compareTo(strValue2) > 0;
+                try {
+                    return Integer.parseInt(strValue1) > Integer.parseInt(strValue2);
+                } catch (NumberFormatException e) {
+                    // Handle non-integer comparison
+                    return strValue1.compareTo(strValue2) > 0;
+                }
             case "<":
-                return strValue1.compareTo(strValue2) < 0;
-            // Adding other comparison operators as needed
+                try {
+                    return Integer.parseInt(strValue1) < Integer.parseInt(strValue2);
+                } catch (NumberFormatException e) {
+                    // Handle non-integer comparison
+                    return strValue1.compareTo(strValue2) < 0;
+                }
+                // Adding other comparison operators as needed
             default:
                 return false;
         }
     }
+
 
 
     Table getTable(String tableName) {
