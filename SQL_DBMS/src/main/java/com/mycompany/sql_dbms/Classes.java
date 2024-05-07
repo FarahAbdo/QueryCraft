@@ -153,23 +153,28 @@ class Parser2 {
         tableName = tableName.replaceAll(";", "").trim();
         System.out.println(tableName);
         Table table = getTable(tableName);
+
         // System.out.println(table.toString());
         List<Record> selectedRecords;
         try {
             String condition = parts[1].trim();
             selectedRecords = selectRecords(table, condition);
         } catch (Exception e) {
-             selectedRecords = table.getRecords();
+            selectedRecords = table.getRecords();
         }
-        // System.out.println("Executing SELECT query on table: " + tableName);
+
         ruselt += "Executing SELECT query on table: " + tableName + "\n";
 
-        // System.out.println(condition);
-        // System.out.println(selectedRecords.size());
+        if (selectedRecords.size() == 0) { // when searching for a nonexistent value.
+            ruselt = "there was no such value";
+            return ruselt;
+        }
+
         for (int j = 0; j < selectedRecords.size(); j++) {
             // System.out.println("Selected Record:");
             if (j == 0)
-                ruselt += "Selected Record:\n";
+                ruselt += "Selected Record:" + "\n";
+
             for (int i = 0; i < table.columns.size(); i++) {
                 // System.out.println(table.columns.get(i).columnName + ": " +
                 // record.values.get(i));
@@ -231,10 +236,20 @@ class Parser2 {
             case "=":
                 return strValue1.equals(strValue2);
             case ">":
-                return strValue1.compareTo(strValue2) > 0;
+                try {
+                    return Integer.parseInt(strValue1) > Integer.parseInt(strValue2);
+                } catch (NumberFormatException e) {
+                    // Handle non-integer comparison
+                    return strValue1.compareTo(strValue2) > 0;
+                }
             case "<":
-                return strValue1.compareTo(strValue2) < 0;
-            // Adding other comparison operators as needed
+                try {
+                    return Integer.parseInt(strValue1) < Integer.parseInt(strValue2);
+                } catch (NumberFormatException e) {
+                    // Handle non-integer comparison
+                    return strValue1.compareTo(strValue2) < 0;
+                }
+                // Adding other comparison operators as needed
             default:
                 return false;
         }
