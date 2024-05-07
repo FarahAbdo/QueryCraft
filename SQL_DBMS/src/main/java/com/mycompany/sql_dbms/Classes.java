@@ -159,6 +159,12 @@ class Parser2 {
         List<Record> selectedRecords = selectRecords(table, condition);
         System.out.println(condition);
         System.out.println(selectedRecords.size());
+        
+        if(selectedRecords.size()==0){ // when searching for a nonexistent value.
+            ruselt = "there was no such value";
+            return ruselt;
+        }
+        
         for (int j=0;j< selectedRecords.size();j++ ) {
            // System.out.println("Selected Record:");
            if(j==0)
