@@ -36,6 +36,7 @@ class Table implements Serializable {
         }
     }
 
+    @Override
     public String toString() {
         String r = "table name: " + tableName + "\nthe records is " + records.size() + "\n";
 
@@ -75,9 +76,9 @@ class Parser2 {
             } else {
                 // Read the list of tables from the file
                 if (file.length() > 0) {
-                    ObjectInputStream ois = new ObjectInputStream(new FileInputStream("tables.bin"));
-                    tables = (List<String>) ois.readObject();
-                    ois.close();
+                    try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("tables.bin"))) {
+                        tables = (List<String>) ois.readObject();
+                    }
                 } else {
                     System.out.println("The file 'tables.bin' is empty.");
                 }
@@ -100,9 +101,9 @@ class Parser2 {
         }
     }
 
-    void parse(String query) {
-        // validation code
-    }
+//    void parse(String query) {
+//        // validation code
+//    }
 
     public String parseCreateTable(String tableName, String[] columns) {
         /*
@@ -148,10 +149,12 @@ class Parser2 {
     public String parseSelect(String statement) {
         String ruselt = "";
         String[] parts = statement.split("(?i)WHERE");
-
+        String [] selectedColomns = parts[0].split("(?i)FROM")[0].substring(6).split(",");
+        
+        
         String tableName = parts[0].split("(?i)FROM")[1].trim();
         tableName = tableName.replaceAll(";", "").trim();
-        System.out.println(tableName);
+       // System.out.println(tableName);
         Table table = getTable(tableName);
 
         // System.out.println(table.toString());
@@ -165,7 +168,8 @@ class Parser2 {
 
         ruselt += "Executing SELECT query on table: " + tableName + "\n";
 
-        if (selectedRecords.size() == 0) { // when searching for a nonexistent value.
+
+        if (selectedRecords.isEmpty()) { // when searching for a nonexistent value.
             ruselt = "there was no such value";
             return ruselt;
         }
@@ -173,14 +177,17 @@ class Parser2 {
         for (int j = 0; j < selectedRecords.size(); j++) {
             // System.out.println("Selected Record:");
             if (j == 0)
-                ruselt += "Selected Record:" + "\n";
+                ruselt += "Selected Record:\n";
 
             for (int i = 0; i < table.columns.size(); i++) {
                 // System.out.println(table.columns.get(i).columnName + ": " +
                 // record.values.get(i));
+                if(isItHere(table.columns.get(i).columnName,selectedColomns )){
                 ruselt += table.columns.get(i).columnName + ": " + selectedRecords.get(j).values.get(i);
+                
                 if (i != table.columns.size() - 1)
                     ruselt += " || ";
+                }
             }
             if (j < selectedRecords.size() - 1)
                 ruselt += "\n";
@@ -227,33 +234,44 @@ class Parser2 {
         // For simplicity, assuming all values are strings
         return valueString;
     }
-
+    boolean  isItHere(String element, String [] array){
+    for(int i=0;i<array.length;i++){
+    if(element.trim().equalsIgnoreCase(array[i].trim()))
+        return true;
+    }
+    
+    return false ;
+    }
     boolean compare(Object value1, String operator, Object value2) {
         // For simplicity, assuming value1 and value2 are strings
         String strValue1 = (String) value1;
         String strValue2 = (String) value2;
         switch (operator) {
-            case "=":
+            case "=" -> {
                 return strValue1.equals(strValue2);
-            case ">":
+            }
+            case ">" -> {
                 try {
                     return Integer.parseInt(strValue1) > Integer.parseInt(strValue2);
                 } catch (NumberFormatException e) {
                     // Handle non-integer comparison
                     return strValue1.compareTo(strValue2) > 0;
                 }
-            case "<":
+            }
+            case "<" -> {
                 try {
                     return Integer.parseInt(strValue1) < Integer.parseInt(strValue2);
                 } catch (NumberFormatException e) {
                     // Handle non-integer comparison
                     return strValue1.compareTo(strValue2) < 0;
                 }
-                // Adding other comparison operators as needed
-            default:
+            }
+            default -> {
                 return false;
+            }
         }
-    }
+        // Adding other comparison operators as needed
+            }
 
     Table getTable(String tableName) {
         for (String tableNamet : tables) {

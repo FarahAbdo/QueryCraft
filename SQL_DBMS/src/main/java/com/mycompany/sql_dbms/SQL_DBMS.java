@@ -6,7 +6,7 @@ package com.mycompany.sql_dbms;
 
 /**
  *
- * @author hp
+ * @author abdo
  */
 public class SQL_DBMS {
 
