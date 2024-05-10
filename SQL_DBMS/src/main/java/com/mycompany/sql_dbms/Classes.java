@@ -27,13 +27,18 @@ class Table implements Serializable {
         return records;
     }
 
-    void storeTable(String filename) {
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(filename))) {
+    void storeTable() {
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(tableName+".bin"))) {
             outputStream.writeObject(this);
-            System.out.println("Table " + tableName + " stored in binary file: " + filename);
+           // System.out.println("Table " + tableName + " stored in binary file: " + filename);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    void deleteRecords(List<Record> recordsToDel){
+        records.removeAll(recordsToDel);
+        this.storeTable();
     }
 
     @Override
@@ -120,7 +125,7 @@ class Parser2 {
         }
         tables.add(table.tableName);
         setTables();
-        table.storeTable(tableName + ".bin");
+        table.storeTable();
         return "the table " + tableName + " is created";
     }
 
@@ -142,7 +147,7 @@ class Parser2 {
             recordValues.add(values[i]);
         }
         table.addRecord(new Record(recordValues));
-        table.storeTable(tableName + ".bin");
+        table.storeTable();
         return "the values are inserted";
     }
 
@@ -163,6 +168,7 @@ class Parser2 {
         List<Record> selectedRecords;
         try {
             String condition = parts[1].trim();
+            condition = condition.replaceAll(";", "").trim();
             selectedRecords = selectRecords(table, condition);
         } catch (Exception e) {
             selectedRecords = table.getRecords();
@@ -187,16 +193,50 @@ class Parser2 {
                 if(isItHere(table.columns.get(i).columnName,selectedColomns )||isAll){
                 ruselt += table.columns.get(i).columnName + ": " + selectedRecords.get(j).values.get(i);
                 
-                if (i != table.columns.size() - 1)
+               
                     ruselt += " || ";
                 }
             }
             if (j < selectedRecords.size() - 1)
                 ruselt += "\n";
         }
+        ruselt = ruselt.replaceAll(" || \n", "\n");
         return ruselt;
     }
+  public String parseDelete(String statement) {
+        String ruselt = "";
+        String[] parts = statement.split("(?i)WHERE");
+        //String [] selectedColomns = parts[0].split("(?i)FROM")[0].substring(6).split(",");
+        //boolean isAll = false ;
+        //if (selectedColomns[0].trim().equals("*"))
+        //isAll = true;
+        
+        String tableName = parts[0].split("(?i)FROM")[1].trim();
+        tableName = tableName.replaceAll(";", "").trim();
+       
+       // System.out.println(tableName);
+        Table table = getTable(tableName);
 
+        // System.out.println(table.toString());
+        List<Record> selectedRecords;
+     
+            String condition = parts[1].trim();
+             condition = condition.replaceAll(";", "").trim();
+            selectedRecords = selectRecords(table, condition);
+        
+
+        //ruselt += "Executing SELECT query on table: " + tableName + "\n";
+
+
+        if (selectedRecords.isEmpty()) { // when searching for a nonexistent value.
+            ruselt = "the condition do not match any values";
+            return ruselt;
+        }
+
+       table.deleteRecords(selectedRecords);
+       
+        return ruselt;
+    }
     List<Record> selectRecords(Table table, String condition) {
         List<Record> selectedRecords = new ArrayList<>();
         // Assuming condition is in the form "columnName comparisonOperator value"
