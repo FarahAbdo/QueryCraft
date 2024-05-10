@@ -1,5 +1,6 @@
 
 
+
     // Parses the UPDATE SQL command
     public String parseUpdate(String updateStatement) {
         try {
@@ -16,10 +17,12 @@
             }
 
             List<Record> recordsToUpdate = (wherePortion != null) ? filterRecords(table, wherePortion) : table.getRecords();
-            updateRecords(recordsToUpdate, columnValues);
+            updateRecords(recordsToUpdate, columnValues,table);
             table.storeTable();
             return "Update successful";
         } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
             return "Error processing the update statement: " + e.getMessage();
         }
     }
@@ -87,30 +90,33 @@
     }
 
 
-    private boolean compare(Object recordValue, String operator, String value) {
-        switch (operator) {
-            case "=":
-                return recordValue.toString().equals(value);
-            case "<":
-                return Double.compare(Double.parseDouble(recordValue.toString()), Double.parseDouble(value)) < 0;
-            case ">":
-                return Double.compare(Double.parseDouble(recordValue.toString()), Double.parseDouble(value)) > 0;
-            case "<>":
-                return !recordValue.toString().equals(value);
-            default:
-                throw new IllegalArgumentException("Unsupported operator: " + operator);
-        }
-    }
+//    private boolean compare(Object recordValue, String operator, String value) {
+//        switch (operator) {
+//            case "=":
+//                return recordValue.toString().equals(value);
+//            case "<":
+//                return Double.compare(Double.parseDouble(recordValue.toString()), Double.parseDouble(value)) < 0;
+//            case ">":
+//                return Double.compare(Double.parseDouble(recordValue.toString()), Double.parseDouble(value)) > 0;
+//            case "<>":
+//                return !recordValue.toString().equals(value);
+//            default:
+//                throw new IllegalArgumentException("Unsupported operator: " + operator);
+//        }
+//    }
 
 
     // Updates records with new column values
-    private void updateRecords(List<Record> records, Map<String, String> columnValues) {
+    private void updateRecords(List<Record> records, Map<String, String> columnValues, Table table) {
         for (Record record : records) {
             for (Map.Entry<String, String> entry : columnValues.entrySet()) {
-                Table table = null;
+
                 int columnIndex = getColumnIndex(table, entry.getKey());
                 if (columnIndex != -1) {
                     record.values.set(columnIndex, entry.getValue());
+                    System.out.println("Updated Record: " + record);
+                } else {
+                    System.out.println("rrrrr");
                 }
             }
         }
