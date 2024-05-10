@@ -25,7 +25,7 @@ public class Parser {
         // this.queryStatment = queryStatment;
 
         String[] words = queryStatment.split(" ");
-        if(validateStartOfQuery(queryStatment))
+        if(validateStartOfQuery(queryStatment)){
         if (words[0].equalsIgnoreCase("create")) {
             System.out.println(words[1]);
             if (words[1].equalsIgnoreCase("table")){
@@ -33,13 +33,15 @@ public class Parser {
                     createTable(queryStatment.substring(13));}
             else
                 queryResponse = "You have an error in your SQL syntax; create should followed by table";
-        } else if (words[0].equalsIgnoreCase("insert")) {
+        }
+        else if (words[0].equalsIgnoreCase("insert")) {
             if (words[1].equalsIgnoreCase("into")&&validateInsertQuery( queryStatment ))
-                
+
                    queryResponse = nextStage.parseInsert(queryStatment);
             else
-                queryResponse = "1You have an error in your SQL syntax;";
-        } else if (words[0].equalsIgnoreCase("select") && validateSelectQuery(queryStatment)) {
+                queryResponse = "You have an error in your SQL syntax;";
+        }
+        else if (words[0].equalsIgnoreCase("select") && validateSelectQuery(queryStatment)) {
            queryResponse = nextStage.parseSelect(queryStatment);
         }
         else if (words[0].equalsIgnoreCase("delete")) {
@@ -50,10 +52,11 @@ public class Parser {
         }
         else{
             queryResponse = "You have an error in your SQL syntax;you should write create or insert or delete";
-       System.out.print(queryResponse);}
+            System.out.print(queryStatment);}
+        }
         else{
             queryResponse = "You have an error in your SQL syntax;you should write create or insert or delete";
-            System.out.print(queryResponse);}
+            System.out.print(queryStatment);}
        
        
         return queryResponse;
