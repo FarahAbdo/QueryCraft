@@ -107,13 +107,16 @@ public class Shell extends javax.swing.JFrame {
         String in = jTextArea1.getText();
         if(evt.getExtendedKeyCode()== 10){
            if(in.charAt(in.length()-1)== ';'){
-                time = System.currentTimeMillis();
+               
                         
-
-              //System.out.println(in.substring(lastQuryBegin));
-             jTextArea1.append( query(in.substring(lastQuryBegin)));
+             String[] queries = in.substring(lastQuryBegin).split(";");
+               for (String querie : queries) {
+                    time = System.currentTimeMillis();
+                   jTextArea1.append(query(querie+";"));
+                   jTextArea1.append("\nmillis is "+(System.currentTimeMillis()-time)+"\n");
+               }
              
-              jTextArea1.append("\nmillis is "+(System.currentTimeMillis()-time)+"\n");
+              
             jTextArea1.append("\nQueryCraft >");
             lastQuryBegin=jTextArea1.getText().length();
            }
@@ -137,9 +140,9 @@ public class Shell extends javax.swing.JFrame {
         else if(evt.getExtendedKeyCode()== 8 && !in.substring(in.length()-12,in.length()).equals("QueryCraft >")&& !in.substring(in.length()-17,in.length()).equals("                >")){
          jTextArea1.setText(in.substring(0, in.length()-1));
         }
-//else {
-           //  jTextArea1.append(""+evt.getExtendedKeyCode());
-        //}
+        else if(evt.getExtendedKeyCode()== 8) {
+             jTextArea1.append(""+evt.getExtendedKeyCode());
+        }
         
         
        jTextArea1.setCaretPosition(jTextArea1.getDocument().getLength());
