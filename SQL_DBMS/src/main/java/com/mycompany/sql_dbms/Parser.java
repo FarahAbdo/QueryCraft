@@ -72,6 +72,7 @@ public static boolean validateInsertQuery(String query) {
         // Basic syntax check
         if (!query.matches("(?i)^INSERT INTO\\s+\\w+\\s*(\\(\\s*\\w+(\\s*,\\s*\\w+)*\\s*\\))?\\s*VALUES\\s*\\(.*\\)\\s*;$")) {
             System.out.println("Invalid INSERT INTO syntax or format.");
+             System.out.println(query);
             return false;
         }
 
@@ -114,6 +115,8 @@ public static boolean validateInsertQuery(String query) {
     public static boolean validateCreateTableQuery(String query) {
         if (!query.trim().matches("(?i)^CREATE TABLE\\s+\\w+\\s*\\((.+)\\)\\s*;$")) {
             queryResponse ="Invalid CREATE TABLE syntax or format.";
+                    System.out.println(query );
+
             return false;
         }
 

@@ -193,14 +193,14 @@ class Parser2 {
                 if(isItHere(table.columns.get(i).columnName,selectedColomns )||isAll){
                 ruselt += table.columns.get(i).columnName + ": " + selectedRecords.get(j).values.get(i);
                 
-               
+                if (i != table.columns.size() - 1)
                     ruselt += " || ";
                 }
             }
             if (j < selectedRecords.size() - 1)
                 ruselt += "\n";
         }
-        ruselt = ruselt.replaceAll(" || \n", "\n");
+        //ruselt = ruselt.replaceAll(" || \n", "\n");
         return ruselt;
     }
   public String parseDelete(String statement) {
