@@ -234,6 +234,7 @@ class Parser2 {
         }
 
        table.deleteRecords(selectedRecords);
+       ruselt = "the record is deleted.";
        
         return ruselt;
     }
