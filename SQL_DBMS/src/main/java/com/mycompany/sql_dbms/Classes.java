@@ -144,6 +144,10 @@ class Parser2 {
         List<Object> recordValues = new ArrayList<>();
         for (int i = 0; i < values.length; i++) {
             values[i] = values[i].trim().replaceAll("'", "");
+            Column column = table.columns.get(i);
+            if (!checkDataType(values[i], column.dataType)) {
+                return "Error: Incorrect data type for column '" + column.columnName + "'. Expected: " + column.dataType;
+            }
             recordValues.add(values[i]);
         }
         table.addRecord(new Record(recordValues));
@@ -151,6 +155,27 @@ class Parser2 {
         return "the values are inserted";
     }
 
+    boolean checkDataType(String value, String dataType) {
+        if (dataType .equals("INT")){
+            return value.matches("^-?\\d+$");
+        }
+        else if (dataType.startsWith("VARCHAR")){
+            return checkVarcharDataType(value, dataType);
+        }
+        else if (dataType.startsWith("CHAR")){
+            return checkVarcharDataType(value, dataType);
+        }
+        else {
+            return false;
+        }
+    }
+
+    boolean checkVarcharDataType(String value, String dataType) {
+        // Extract the length from the VARCHAR type
+        int length = Integer.parseInt(dataType.replaceAll("\\D+", ""));
+        return value.length() <= length && value.matches("^[a-zA-Z0-9]*$");
+    }
+    
     public String parseSelect(String statement) {
         String ruselt = "";
         String[] parts = statement.split("(?i)WHERE");
