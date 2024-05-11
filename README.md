@@ -99,7 +99,7 @@ cd QueryCraft
 
 ## Contributing
 
-Contributions to the QueryCraft DBMS project are welcome! Please refer to the `CONTRIBUTING.md` file for guidelines on how to make contributions (note: create this file if it doesn't exist).
+Contributions to the QueryCraft DBMS project are welcome! Please refer to the `CONTRIBUTING.md` file for guidelines on how to make contributions.
 
 ## License
 
