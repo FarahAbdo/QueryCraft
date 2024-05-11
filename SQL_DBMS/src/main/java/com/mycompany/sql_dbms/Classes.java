@@ -3,6 +3,10 @@ package com.mycompany.sql_dbms;
 import java.io.Serializable;
 import java.util.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 class Table implements Serializable {
     String tableName;
@@ -144,6 +148,10 @@ class Parser2 {
         List<Object> recordValues = new ArrayList<>();
         for (int i = 0; i < values.length; i++) {
             values[i] = values[i].trim().replaceAll("'", "");
+            Column column = table.columns.get(i);
+            if (!checkDataType(values[i], column.dataType)) {
+                return "Error: Incorrect data type for column '" + column.columnName + "'. Expected: " + column.dataType;
+            }
             recordValues.add(values[i]);
         }
         table.addRecord(new Record(recordValues));
@@ -151,6 +159,27 @@ class Parser2 {
         return "the values are inserted";
     }
 
+    boolean checkDataType(String value, String dataType) {
+        if (dataType .equals("INT")){
+            return value.matches("^-?\\d+$");
+        }
+        else if (dataType.startsWith("VARCHAR")){
+            return checkVarcharDataType(value, dataType);
+        }
+        else if (dataType.startsWith("CHAR")){
+            return checkVarcharDataType(value, dataType);
+        }
+        else {
+            return false;
+        }
+    }
+
+    boolean checkVarcharDataType(String value, String dataType) {
+        // Extract the length from the VARCHAR type
+        int length = Integer.parseInt(dataType.replaceAll("\\D+", ""));
+        return value.length() <= length && value.matches("^[a-zA-Z0-9]*$");
+    }
+    
     public String parseSelect(String statement) {
         String ruselt = "";
         String[] parts = statement.split("(?i)WHERE");
@@ -234,9 +263,140 @@ class Parser2 {
         }
 
        table.deleteRecords(selectedRecords);
+       ruselt = "the record is deleted.";
        
         return ruselt;
     }
+
+
+
+public String parseUpdate(String updateStatement) {
+    try {
+        String[] parts = updateStatement.split("SET");
+        String tableName = extractTableName(parts[0].trim());
+        String[] afterSet = parts[1].split("WHERE");
+        String updatePortion = afterSet[0].trim();
+        String wherePortion = afterSet.length > 1 ? afterSet[1].trim() : null;
+
+        Map<String, String> columnValues = parseColumnValues(updatePortion);
+        Table table = getTable(tableName);
+        if (table == null) {
+            return "Error: Table '" + tableName + "' does not exist.";
+        }
+
+        List<Record> recordsToUpdate = (wherePortion != null) ? filterRecords(table, wherePortion) : table.getRecords();
+        int updatedCount = updateRecords(recordsToUpdate, columnValues, table);
+
+        if (updatedCount > 0) {
+            table.storeTable(); // Ensure to store only if updates were made
+            return "Update successful. " + updatedCount + " record(s) updated.";
+        } else {
+            return "No records updated. Check your WHERE clause or data.";
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        return "Error processing the update statement: " + e.getMessage();
+    }
+}
+
+
+
+// Extracts the table name from the part of the statement before 'SET'
+private String extractTableName(String part) {
+    return part.replace("UPDATE", "").trim();
+}
+
+// Parses the column-value pairs from the update portion
+private Map<String, String> parseColumnValues(String updatePortion) {
+    Map<String, String> columnValues = new HashMap<>();
+    String[] pairs = updatePortion.split(",");
+    for (String pair : pairs) {
+        String[] keyValue = pair.split("=");
+        columnValues.put(keyValue[0].trim(), keyValue[1].trim().replaceAll("'", ""));
+    }
+    return columnValues;
+}
+
+
+private List<Record> filterRecords(Table table, String whereCondition) {
+    List<Record> filteredRecords = new ArrayList<>();
+
+    // Splitting the condition manually
+    String[] parts = whereCondition.split(" ");
+    if (parts.length < 3) {
+        throw new IllegalArgumentException("Invalid WHERE clause format.");
+    }
+
+    String columnName = parts[0].trim();
+    String operator = parts[1].trim();
+    String value = whereCondition.substring(whereCondition.indexOf(operator) + operator.length()).trim();
+    value = value.replaceAll("'", "").trim(); // Clean quotes if value is a string
+    value = value.replaceAll(";", "").trim(); // Clean quotes if value is a string
+
+    int columnIndex = getColumnIndex(table, columnName);
+    if (columnIndex == -1) {
+        System.err.println("Error: Column '" + columnName + "' not found in table '" + table.tableName + "'.");
+        return filteredRecords; // Returning empty list if column not found
+    }
+
+    // Evaluating each record against the parsed condition
+    for (Record record : table.getRecords()) {
+        Object recordValue = record.values.get(columnIndex);
+        if (compare(recordValue, operator, value)) {
+            filteredRecords.add(record);
+        }
+    }
+
+    return filteredRecords;
+}
+private int updateRecords(List<Record> records, Map<String, String> columnValues, Table table) {
+    int updatedCount = 0;
+    for (int i = 0; i < records.size(); i++) {
+        System.out.println(records.get(i).toString());
+    }
+
+    for (Record record : records) {
+        boolean isUpdated = false;
+        System.out.println("Checking record: " + record.values);
+        for (Map.Entry<String, String> entry : columnValues.entrySet()) {
+            int columnIndex = getColumnIndex(table, entry.getKey());
+            if (columnIndex != -1) {
+                Object currentValue = record.values.get(columnIndex);
+                Object newValue = entry.getValue();
+                System.out.println("Current value: " + currentValue + ", New value: " + newValue);
+                if (!currentValue.equals(newValue)) {
+                    record.values.set(columnIndex, newValue);
+                    isUpdated = true;
+                    System.out.println("Updated column: " + entry.getKey() + " from " + currentValue + " to " + newValue);
+                }
+            } else {
+                System.out.println("Column " + entry.getKey() + " not found.");
+            }
+        }
+        if (isUpdated) {
+            updatedCount++;
+        }
+    }
+    return updatedCount;
+}
+
+
+
+// Helper method to find a column index by name
+private int getColumnIndex(Table table, String columnName) {
+    for (int i = 0; i < table.columns.size(); i++) {
+        if (table.columns.get(i).columnName.equalsIgnoreCase(columnName)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+
+
+
+
+    
     List<Record> selectRecords(Table table, String condition) {
         List<Record> selectedRecords = new ArrayList<>();
         // Assuming condition is in the form "columnName comparisonOperator value"
