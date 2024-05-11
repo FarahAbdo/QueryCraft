@@ -45,7 +45,7 @@ QueryCraft/
 ├── .gitignore                 ' Specifies files and directories to be ignored by version control
 ├── LICENSE.md                 ' Licensing information
 ├── README.md                  ' Overview and instructions for the project
-└── pom.xml                    ' Maven project configuration file
+└── CONTRIBUTING.md
 ``` 
 
 ## Documentation
