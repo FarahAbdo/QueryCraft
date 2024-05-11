@@ -3,6 +3,10 @@ package com.mycompany.sql_dbms;
 import java.io.Serializable;
 import java.util.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 class Table implements Serializable {
     String tableName;
