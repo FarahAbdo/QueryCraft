@@ -60,6 +60,7 @@ QueryCraft/
 ├── LICENSE.md                 ' Licensing information
 ├── README.md                  ' Overview and instructions for the project
 └── pom.xml                    ' Maven project configuration file
+``` 
 
 ## Documentation
 
@@ -72,7 +73,6 @@ To get started with the QueryCraft DBMS project, refer to the `README.md` for in
 ## Database
 
 Details on the database schema, configuration, and how to seed the database can be found in the source code and binary files within the `src/` and `target/` directories.
-
 
 ## Build and Deployment
 
