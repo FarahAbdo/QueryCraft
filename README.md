@@ -88,14 +88,15 @@ Ensure you have the following installed on your system:
 
 1. **Clone the Repository**
 
-   Clone the QueryCraft repository from GitHub:
-   ```bash
-   git clone https://github.com/FarahAbdo/QueryCraft.git
-
+Clone the QueryCraft repository from GitHub:
+```bash
+git clone https://github.com/FarahAbdo/QueryCraft.git
+```
 2. **Navigate to the Project DirectoryChange your working directory to the cloned repository**
-  ```bash
-  cd QueryCraft
-  ```
+```bash
+cd QueryCraft
+```
+
 ## Contributing
 
 Contributions to the QueryCraft DBMS project are welcome! Please refer to the `CONTRIBUTING.md` file for guidelines on how to make contributions (note: create this file if it doesn't exist).
