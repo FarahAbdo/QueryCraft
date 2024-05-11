@@ -17,47 +17,49 @@ The QueryCraft DBMS project aims to develop a high-performance database manageme
 
 ## Directory Structure
 
-- **docs/**: Contains project documentation.
-  - **README.md**: Overview and instructions for the project.
-  - **API_Docs/**: Documentation related to the database operations.
-- **src/**: Source code for the project.
-  - **main/java/com/mycompany/sql_dbms/**: Core source code.
-    - **Classes.java**
-    - **Parser.java**
-    - **SQL_DBMS.java**
-    - **Shell.form**
-    - **Shell.java**
-  - **binary/**: Binary file operations.
-    - **BinaryHandler.java**: Binary file operations code.
-- **target/**: Compiled classes and JAR.
-  - **classes/com/mycompany/sql_dbms/**: Compiled class files.
-    - **Column.class**
-    - **Parser.class**
-    - **Parser2.class**
-    - **Record.class**
-    - **SQL_DBMS.class**
-    - **Shell$1.class**
-    - **Shell$2.class**
-    - **Shell.class**
-    - **Table.class**
-  - **maven-archiver/**
-    - **pom.properties**
-  - **maven-status/maven-compiler-plugin/**
-    - **compile/default-compile/**
-      - **createdFiles.lst**
-      - **inputFiles.lst**
-    - **testCompile/default-testCompile/**
-      - **createdFiles.lst**
-      - **inputFiles.lst**
-  - **SQL_DBMS-1.0-SNAPSHOT.jar**
-  - **emp.bin**
-  - **gam3ia.bin**
-  - **gamia.bin**
-  - **tables.bin**
-- **.gitignore**: Specifies files and directories to be ignored by version control.
-- **LICENSE.md**: Licensing information.
-- **README.md**: Overview and instructions for the project.
-- **pom.xml**: Maven project configuration file.
+```vbnet
+QueryCraft/
+├── docs/
+│   ├── README.md              ' Overview and instructions for the project
+│   └── API_Docs/              ' Documentation related to the database operations
+├── src/
+│   ├── main/java/com/mycompany/sql_dbms/
+│   │   ├── Classes.java
+│   │   ├── Parser.java
+│   │   ├── SQL_DBMS.java
+│   │   ├── Shell.form
+│   │   └── Shell.java
+│   └── binary/
+│       └── BinaryHandler.java ' Binary file operations code
+├── target/
+│   ├── classes/com/mycompany/sql_dbms/
+│   │   ├── Column.class
+│   │   ├── Parser.class
+│   │   ├── Parser2.class
+│   │   ├── Record.class
+│   │   ├── SQL_DBMS.class
+│   │   ├── Shell$1.class
+│   │   ├── Shell$2.class
+│   │   ├── Shell.class
+│   │   └── Table.class
+│   ├── maven-archiver/
+│   │   └── pom.properties
+│   ├── maven-status/maven-compiler-plugin/
+│   │   ├── compile/default-compile/
+│   │   │   ├── createdFiles.lst
+│   │   │   └── inputFiles.lst
+│   │   └── testCompile/default-testCompile/
+│   │       ├── createdFiles.lst
+│   │       └── inputFiles.lst
+│   ├── SQL_DBMS-1.0-SNAPSHOT.jar
+│   ├── emp.bin
+│   ├── gam3ia.bin
+│   ├── gamia.bin
+│   └── tables.bin
+├── .gitignore                 ' Specifies files and directories to be ignored by version control
+├── LICENSE.md                 ' Licensing information
+├── README.md                  ' Overview and instructions for the project
+└── pom.xml                    ' Maven project configuration file
 
 ## Documentation
 
@@ -86,14 +88,14 @@ Ensure you have the following installed on your system:
 
 1. **Clone the Repository**
 
-   First, clone the QueryCraft repository from GitHub:
+   Clone the QueryCraft repository from GitHub:
    ```bash
    git clone https://github.com/FarahAbdo/QueryCraft.git
 
 2. **Navigate to the Project DirectoryChange your working directory to the cloned repository**
   ```bash
   cd QueryCraft
-
+  ```
 ## Contributing
 
 Contributions to the QueryCraft DBMS project are welcome! Please refer to the `CONTRIBUTING.md` file for guidelines on how to make contributions (note: create this file if it doesn't exist).
