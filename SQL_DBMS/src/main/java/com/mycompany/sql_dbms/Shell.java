@@ -13,14 +13,16 @@ public class Shell extends javax.swing.JFrame {
     /**
      * Creates new form NewJFrame
      */
-    
+    boolean loged ;
     long time;
-    int lastQuryBegin=38;
+    int lastQuryBegin=52;
+    String lastQ;
     Parser pars;
     public Shell() {
         initComponents();
         load();
         pars = new Parser();
+        loged = false;
     }
 
     /**
@@ -44,7 +46,7 @@ public class Shell extends javax.swing.JFrame {
         jTextArea1.setFont(new java.awt.Font("Segoe Print", 1, 18)); // NOI18N
         jTextArea1.setForeground(new java.awt.Color(255, 255, 255));
         jTextArea1.setRows(5);
-        jTextArea1.setText("Hellow enter your u and p\nQueryCraft >");
+        jTextArea1.setText("Hellow enter your Username and password\nQueryCraft >");
         jTextArea1.setToolTipText("");
         jTextArea1.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jTextArea1.setName(""); // NOI18N
@@ -96,6 +98,7 @@ public class Shell extends javax.swing.JFrame {
     queryStatment = queryStatment.replaceAll("\n                >"," ");
     queryStatment = queryStatment.trim();
     //System.out.println(queryStatment);
+    lastQ = queryStatment;
     return"\n" + pars.query(queryStatment);
     } 
     
@@ -105,7 +108,8 @@ public class Shell extends javax.swing.JFrame {
     
     private void jTextArea1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextArea1KeyPressed
         String in = jTextArea1.getText();
-        if(evt.getExtendedKeyCode()== 10){
+        
+        if(evt.getExtendedKeyCode()== 10 && loged){
            if(in.charAt(in.length()-1)== ';'){
                
                         
@@ -115,6 +119,7 @@ public class Shell extends javax.swing.JFrame {
                    jTextArea1.append(query(querie+";"));
                    jTextArea1.append("\nmillis is "+(System.currentTimeMillis()-time)+"\n");
                }
+               
              
               
             jTextArea1.append("\nQueryCraft >");
@@ -140,11 +145,21 @@ public class Shell extends javax.swing.JFrame {
         else if(evt.getExtendedKeyCode()== 8 && !in.substring(in.length()-12,in.length()).equals("QueryCraft >")&& !in.substring(in.length()-17,in.length()).equals("                >")){
          jTextArea1.setText(in.substring(0, in.length()-1));
         }
-        else if(evt.getExtendedKeyCode()== 8) {
-             jTextArea1.append(""+evt.getExtendedKeyCode());
+        else if(evt.getExtendedKeyCode()== 38) {
+             jTextArea1.append(lastQ);
+        } 
+        
+        System.out.println(in.substring(in.length()-"-u scott -p tiger".length(),in.length()).trim());
+        System.out.println(loged);
+        if( in.substring(in.length()-"-u scott -p tiger".length(),in.length()).trim().equalsIgnoreCase("-u scott -p tiger"))
+           loged = true;
+        System.out.println(loged);
+        
+        if(evt.getExtendedKeyCode()== 10&&!loged){
+            jTextArea1.append("\nthe username or/and password is un correct\nQueryCraft >");
+            
+        lastQuryBegin=jTextArea1.getText().length();
         }
-        
-        
        jTextArea1.setCaretPosition(jTextArea1.getDocument().getLength());
     }//GEN-LAST:event_jTextArea1KeyPressed
 

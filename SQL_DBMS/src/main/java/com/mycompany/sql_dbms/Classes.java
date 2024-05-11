@@ -395,7 +395,6 @@ private int getColumnIndex(Table table, String columnName) {
 
 
 
-
     
     List<Record> selectRecords(Table table, String condition) {
         List<Record> selectedRecords = new ArrayList<>();
@@ -423,14 +422,7 @@ private int getColumnIndex(Table table, String columnName) {
         return selectedRecords;
     }
 
-    int getColumnIndex(Table table, String columnName) {
-        for (int i = 0; i < table.columns.size(); i++) {
-            if (table.columns.get(i).columnName.equals(columnName)) {
-                return i;
-            }
-        }
-        return -1;
-    }
+    
 
     Object getValueFromString(String valueString) {
         // For simplicity, assuming all values are strings
