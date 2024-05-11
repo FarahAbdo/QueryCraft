@@ -42,20 +42,6 @@ QueryCraft/
 │   │   ├── Shell$2.class
 │   │   ├── Shell.class
 │   │   └── Table.class
-│   ├── maven-archiver/
-│   │   └── pom.properties
-│   ├── maven-status/maven-compiler-plugin/
-│   │   ├── compile/default-compile/
-│   │   │   ├── createdFiles.lst
-│   │   │   └── inputFiles.lst
-│   │   └── testCompile/default-testCompile/
-│   │       ├── createdFiles.lst
-│   │       └── inputFiles.lst
-│   ├── SQL_DBMS-1.0-SNAPSHOT.jar
-│   ├── emp.bin
-│   ├── gam3ia.bin
-│   ├── gamia.bin
-│   └── tables.bin
 ├── .gitignore                 ' Specifies files and directories to be ignored by version control
 ├── LICENSE.md                 ' Licensing information
 ├── README.md                  ' Overview and instructions for the project
