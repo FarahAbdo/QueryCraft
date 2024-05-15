@@ -17,7 +17,7 @@ boolean loged;
     long time;
     int lastQuryBegin=55;
     Parser pars;
-    String lastQ;
+    String lastQ ;
     public Shell() {
         initComponents();
         load();
@@ -97,7 +97,6 @@ boolean loged;
         queryStatment = queryStatment.replaceAll("\n                >"," ");
         queryStatment = queryStatment.trim();
         lastQ = queryStatment;
-        //System.out.println(queryStatment);
         return"\n" + pars.query(queryStatment);
     }
 
@@ -107,7 +106,7 @@ boolean loged;
 
     private void jTextArea1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextArea1KeyPressed
         String in = jTextArea1.getText();
-
+//time = System.currentTimeMillis();
         if(evt.getExtendedKeyCode()== 10 && loged){
             if(in.charAt(in.length()-1)== ';'){
 
