@@ -46,7 +46,7 @@ public class Shell extends javax.swing.JFrame {
         jTextArea1.setFont(new java.awt.Font("Segoe Print", 1, 18)); // NOI18N
         jTextArea1.setForeground(new java.awt.Color(255, 255, 255));
         jTextArea1.setRows(5);
-        jTextArea1.setText("Hellow enter your Username and password\nQueryCraft >");
+        jTextArea1.setText("Hello, enter your Username and password\nQueryCraft >");
         jTextArea1.setToolTipText("");
         jTextArea1.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jTextArea1.setName(""); // NOI18N
