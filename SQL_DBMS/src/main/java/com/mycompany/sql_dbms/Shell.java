@@ -15,7 +15,7 @@ public class Shell extends javax.swing.JFrame {
      */
 boolean loged;
     long time;
-    int lastQuryBegin=52;
+    int lastQuryBegin=55;
     Parser pars;
     String lastQ;
     public Shell() {
@@ -96,6 +96,7 @@ boolean loged;
     private String query(String queryStatment){
         queryStatment = queryStatment.replaceAll("\n                >"," ");
         queryStatment = queryStatment.trim();
+        lastQ = queryStatment;
         //System.out.println(queryStatment);
         return"\n" + pars.query(queryStatment);
     }
